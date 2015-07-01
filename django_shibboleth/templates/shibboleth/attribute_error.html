@@ -1,18 +1,19 @@
-{% extends "main.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Forbidden</title>
+</head>
 
-{% block title %}Forbidden{% endblock %}
+<body>
+  <h1>Forbidden</h1>
+  <div id="content">
+    <p>Your IdP is not releasing all the required attributes for this service.</p>
 
-{% block content_title %}Forbidden{% endblock %}
-
-{% block content %}
-
-<p>Your IdP is not releasing all the required attributes for this service.</p>
-
-<ul>
-  {% for name,value in shib_attrs.items %}
-  <li>{{ name }}:     <b>{{ value|default:'<span class="red">missing</span>' }}</b></li>
-  {% endfor %}
-</ul>
-
-{% endblock %}
-
+    <ul>
+    {% for name,value in shib_attrs.items %}
+      <li>{{ name }}:     <b>{{ value|default:'<span class="red">missing</span>' }}</b></li>
+    {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>
