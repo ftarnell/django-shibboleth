@@ -28,7 +28,7 @@ from signals import shib_logon_done
 
 
 def render_forbidden(*args, **kwargs):
-    httpresponse_kwargs = {'mimetype': kwargs.pop('mimetype', None)}
+    httpresponse_kwargs = {'content_type': kwargs.pop('content_type', None)}
     return HttpResponseForbidden(loader.render_to_string(*args, **kwargs),
                                  **httpresponse_kwargs)
 
