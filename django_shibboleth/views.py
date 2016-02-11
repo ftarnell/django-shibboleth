@@ -22,9 +22,9 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from utils import parse_attributes
-from forms import BaseRegisterForm
-from signals import shib_logon_done
+from django_shibboleth.utils import parse_attributes
+from django_shibboleth.forms import BaseRegisterForm
+from django_shibboleth.signals import shib_logon_done
 
 
 def render_forbidden(*args, **kwargs):
