@@ -23,7 +23,6 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 from django_shibboleth.utils import parse_attributes
-from django_shibboleth.forms import BaseRegisterForm
 from django_shibboleth.signals import shib_logon_done
 
 
@@ -33,9 +32,7 @@ def render_forbidden(*args, **kwargs):
                                  **httpresponse_kwargs)
 
 
-def shib_register(request, RegisterForm=BaseRegisterForm,
-                  register_template_name='shibboleth/register.html'):
-
+def shib_register(request):
     attr, error = parse_attributes(request.META)
 
     was_redirected = False
@@ -68,20 +65,13 @@ def shib_register(request, RegisterForm=BaseRegisterForm,
     try:
         user = User.objects.get(username=attr[settings.SHIB_USERNAME])
     except User.DoesNotExist:
-        form = RegisterForm()
-        context = {'form': form,
-                   'next': redirect_url,
-                   'shib_attrs': attr,
-                   'was_redirected': was_redirected}
-        return render_to_response(register_template_name,
-                                  context,
-                                  context_instance=RequestContext(request))
+        user = User.objects.create_user(attr[settings.SHIB_USERNAME], attr[settings.SHIB_EMAIL], '')
 
     user.set_unusable_password()
     try:
+        user.email = attr[settings.SHIB_EMAIL]
         user.first_name = attr[settings.SHIB_FIRST_NAME]
         user.last_name = attr[settings.SHIB_LAST_NAME]
-        user.email = attr[settings.SHIB_EMAIL]
     except:
         pass
     user.save()
