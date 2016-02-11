@@ -58,10 +58,6 @@ def shib_register(request):
                                   context,
                                   context_instance=RequestContext(request))
 
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save(attr)
     try:
         user = User.objects.get(username=attr[settings.SHIB_USERNAME])
     except User.DoesNotExist:
