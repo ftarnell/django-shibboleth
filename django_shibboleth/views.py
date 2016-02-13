@@ -35,10 +35,20 @@ def render_forbidden(*args, **kwargs):
 def shib_register(request):
     attr, error = parse_attributes(request.META)
 
-    was_redirected = False
-    if "next" in request.REQUEST:
+
+    next = None
+    if request.method == "POST" and "next" in request.POST:
+        next = request.POST["next"]
+    elif request.method == "GET" and "next" in request.GET:
+        next = request.GET["next"]
+
+    if next is not None:
         was_redirected = True
-    redirect_url = request.REQUEST.get('next', settings.LOGIN_REDIRECT_URL)
+        redirect_url = next
+    else:
+        was_redirected = False
+        redirect_url = settings.LOGIN_REDIRECT_URL
+
     context = {'shib_attrs': attr,
                'was_redirected': was_redirected}
     if error:
